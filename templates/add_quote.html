@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}Add Quote{% endblock %}
+{% block body %}
+<form action="{{ url_for('add_quote') }}" method = 'post' id="quote_form">
+	Text:<br>
+	<textarea name="text" form="quote_form"></textarea><br>
+	Source:<br>
+	<input type="text" name="source"><br>
+	Comma-separated list of moods:<br>
+	<input type="text" name="moods"><br>
+	Quote Source:<br>
+	<textarea name="quote_source" form="quote_form"></textarea>
+	<input type="submit" value="Add Quote">
+</form>
+
+{% endblock %}

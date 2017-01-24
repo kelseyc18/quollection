@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}New User{% endblock %}
+{% block body %}
+<form action="{{ url_for('new_user') }}" method = 'post'>
+  Name:<br>
+  <input type="text" name="name"><br>
+  Email Address:<br>
+  <input type="email" name="email"><br>
+  Password:<br>
+  <input type="password" name="password"><br>
+  <input type="submit" value="Create Account">
+</form>
+<p> Already have an account? Login <a href="{{url_for('login')}}">here</a></p>
+{% endblock %}
+
+{% set hide_nav = True %}

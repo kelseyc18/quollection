@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+{% if random_quote %}
+<p class="random-quote-text text-center">{{random_quote.text}}</p>
+<p class="random-quote-source text-center">{{random_quote.source}}</p>
+{% endif %}
+{% endblock %}

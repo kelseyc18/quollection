@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}All Quotes{% endblock %}
+{% block body %}
+
+{% if mood %}
+<div class="chip">{{mood.description}}
+<span class="closebtn" onclick="this.parentElement.style.display='none'"><a href="{{url_for('view_all_quotes')}}">&times;</a></span></div>
+{% endif %}
+
+{% if quotes==[] %}
+<p>You have no quotes.</p>
+{% else %}
+<div class="quotes">
+	{% for quote in quotes %}
+	<div class="quote">
+   	<p><b>{{quote.text}}</b></p>
+   	<p><i>{{quote.source}}</i></p>
+   	<p>{{quote.quote_source}}</p>
+   	<p>{% if quote.moods != [] %} Moods: {% endif %}
+    {% for moodassoc in quote.moods %}
+   		<a href="{{ url_for('view_quotes_by_mood', mood_id=moodassoc.mood_id) }}">{{ moodassoc.mood.description }}</a> 
+   	{% endfor %}</p>
+   	</div>
+  	{% endfor %}
+</div>
+{% endif %}
+{% endblock %}
