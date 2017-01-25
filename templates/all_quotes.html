@@ -4,7 +4,7 @@
 
 {% if mood %}
 <div class="chip">{{mood.description}}
-<span class="closebtn" onclick="this.parentElement.style.display='none'"><a href="{{url_for('view_all_quotes')}}">&times;</a></span></div>
+<span class="closebtn" onclick="window.location.href='{{url_for("view_all_quotes")}}'">&times;</span></div>
 {% endif %}
 
 {% if quotes==[] %}
