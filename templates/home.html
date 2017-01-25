@@ -2,7 +2,10 @@
 {% block title %}Home{% endblock %}
 {% block body %}
 {% if random_quote %}
+<div class="pull-right quote-mark"><img src="{{ url_for('static', filename='quotemark.svg') }}"></div>
+<div>
 <p class="random-quote-text text-center">{{random_quote.text}}</p>
 <p class="random-quote-source text-center">{{random_quote.source}}</p>
+</div>
 {% endif %}
 {% endblock %}

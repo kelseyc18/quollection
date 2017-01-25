@@ -28,6 +28,11 @@
 	padding: 10px;
 }
 
+.quote-mark {
+	margin-left: 5px;
+	width: 64px;
+}
+
 .random-quote-text {
 	font-size: 2em;
 }

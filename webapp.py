@@ -121,19 +121,53 @@ def add_quote():
 
         # Handle moods
         mood_names = request.form['moods']
-        mood_names = mood_names.split(',')
-        for mood_name in mood_names:
-            mood_name = mood_name.lower().lstrip().rstrip()
-            mood = session.query(Mood).filter_by(description=mood_name).first()
-            if mood is None:
-                mood = Mood(description=mood_name, user=user, user_id=login_session['id'])
-                session.add(mood)
-                session.commit()
-            assoc = MoodAssociation(mood=mood, quote=quote)
-            session.add_all([mood, quote, assoc])
-            session.commit()
-            
+        update_mood_associations(mood_names, user, quote)
         return redirect(url_for('view_all_quotes'))
+
+@app.route('/edit/<int:quote_id>', methods = ['GET', 'POST'])
+def edit_quote(quote_id):
+    if 'id' not in login_session:
+        flash("You must be logged in to perform this action", 'alert-info')
+        return redirect(url_for('login'))
+    if request.method == 'GET':
+        quote = session.query(Quote).filter_by(id=quote_id).one()
+        if quote.user_id != login_session['id']:
+            flash("You do not have the access privilege to view this quote", 'alert-danger')
+            return redirect(url_for('view_all_quotes'))
+        moodAssociations = session.query(MoodAssociation).filter_by(quote_id=quote_id).all()
+        moods_list = [moodAssociation.mood.description for moodAssociation in moodAssociations]
+        print moods_list
+        moods_string = ", ".join(moods_list)
+        print moods_string
+        return render_template('edit_quote.html', quote=quote, moods=moods_string)
+    elif request.method == 'POST':
+        print 'post to edit_quote'
+        text = request.form['text']
+        source = request.form['source']
+        quote_source = request.form['quote_source']
+        quote = session.query(Quote).filter_by(id=quote_id).one()
+        user = session.query(User).filter_by(id=login_session['id']).one()
+        session.query(MoodAssociation).filter_by(quote_id=quote_id).delete()
+        session.commit()
+
+        # Handle moods
+        mood_names = request.form['moods']
+        update_mood_associations(mood_names, user, quote)
+        flash("Your quote has been successfully edited.", 'alert-success')
+        return redirect(url_for('view_all_quotes'))
+
+def update_mood_associations(mood_names, user, quote):
+    mood_names = mood_names.split(',')
+    for mood_name in mood_names:
+        mood_name = mood_name.lower().lstrip().rstrip()
+        mood = session.query(Mood).filter_by(description=mood_name).first()
+        if mood is None:
+            mood = Mood(description=mood_name, user=user, user_id=login_session['id'])
+            session.add(mood)
+            session.commit()
+        assoc = MoodAssociation(mood=mood, quote=quote)
+        session.add_all([mood, quote, assoc])
+        session.commit()
 
 if __name__ == '__main__':
     app.run(debug=True)
